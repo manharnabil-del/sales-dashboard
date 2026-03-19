@@ -4,8 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Store POS</title>
-<link rel="stylesheet" href="style.css">
+
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -20,10 +23,8 @@
 
 <main>
 
-<!-- PRODUCTS -->
 <div class="products" id="products"></div>
 
-<!-- TABLE -->
 <div class="table-section">
   <h2>Sales Summary</h2>
   <table>
@@ -41,32 +42,16 @@
 </main>
 
 <script>
-// PRODUCTS LIST
+
+// PRODUCTS
 const products = [
 "Candy","Soda","Gatorade","Water","Sunny D","Capri Sun",
 "Mac and Cheese","Ramen (Beef)","Ramen (Chicken)",
 "Cup Ramen","Apple Sauce","Small Candy (2)","Chips"
 ];
 
-// STATE
-let data = JSON.parse(localStorage.getItem("sales")) || {};
-let total = 0;
-
-const productsDiv = document.getElementById("products");
-const table = document.getElementById("table-body");
-const totalDiv = document.getElementById("total-sales");
-
-// CREATE UI
-products.forEach(name => {
-
-  if (!data[name]) data[name] = { units: 0, revenue: 0 };
-
-  const div = document.createElement("div");
-  div.className = "product";
-
-  div.innerHTML = `
-    <div class="badge">${data[name].units}</div>
-   const icons = {
+// ICONS
+const icons = {
   "Candy": "fa-candy-cane",
   "Soda": "fa-glass-water",
   "Gatorade": "fa-bottle-water",
@@ -82,12 +67,25 @@ products.forEach(name => {
   "Chips": "fa-bag-shopping"
 };
 
-div.innerHTML = `
-  <div class="badge">${data[name].units}</div>
-  <i class="fa-solid ${icons[name] || 'fa-box'} icon"></i>
-  <p>${name}</p>
-  <button>Sell $1</button>
-`;
+// DATA
+let data = JSON.parse(localStorage.getItem("sales")) || {};
+let total = 0;
+
+const productsDiv = document.getElementById("products");
+const table = document.getElementById("table-body");
+const totalDiv = document.getElementById("total-sales");
+
+// BUILD UI
+products.forEach(name => {
+
+  if (!data[name]) data[name] = { units: 0, revenue: 0 };
+
+  const div = document.createElement("div");
+  div.className = "product";
+
+  div.innerHTML = `
+    <div class="badge">${data[name].units}</div>
+    <i class="fa-solid ${icons[name] || 'fa-box'} icon"></i>
     <p>${name}</p>
     <button>Sell $1</button>
   `;
@@ -110,7 +108,7 @@ div.innerHTML = `
 
   productsDiv.appendChild(div);
 
-  // table row
+  // TABLE ROW
   const row = document.createElement("tr");
   row.id = name;
   row.innerHTML = `
@@ -123,7 +121,7 @@ div.innerHTML = `
   total += data[name].revenue;
 });
 
-// UPDATE TOTAL
+// TOTAL
 totalDiv.textContent = "$" + total.toFixed(2);
 
 // UPDATE TABLE
@@ -144,6 +142,7 @@ document.getElementById("reset-btn").onclick = () => {
   localStorage.clear();
   location.reload();
 };
+
 </script>
 
 </body>
