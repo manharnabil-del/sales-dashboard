@@ -1,4 +1,4 @@
-/* RESET */
+/* RESET & BODY */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
@@ -88,6 +88,7 @@ header {
   width: 100%;
   border-radius: 5px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 .product button:hover {
