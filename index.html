@@ -21,7 +21,6 @@
 
 <main>
 
-<!-- Product Categories (optional future use) -->
 <div class="products" id="products"></div>
 
 <div class="table-section">
@@ -43,12 +42,11 @@
 <script>
 // PRODUCTS
 const products = [
-  "Candy","Soda","Gatorade","Water","Sunny D","Capri Sun",
-  "Mac and Cheese","Ramen (Beef)","Ramen (Chicken)",
-  "Cup Ramen","Apple Sauce","Small Candy (2)","Chips"
+  "Candy","Small Candy (2)","Soda","Gatorade","Water","Sunny D","Capri Sun",
+  "Mac and Cheese","Ramen (Beef)","Ramen (Chicken)","Cup Ramen","Apple Sauce","Chips"
 ];
 
-// ICONS
+// ICONS (fixed)
 const icons = {
   "Candy": "fa-candy-cane",
   "Small Candy (2)": "fa-cookie",
@@ -59,27 +57,27 @@ const icons = {
   "Capri Sun": "fa-cup-straw",
   "Mac and Cheese": "fa-bowl-food",
   "Ramen (Beef)": "fa-utensils",
-  "Ramen (Chicken)": "fa-utensils",
+  "Ramen (Chicken)": "fa-mug-hot",
   "Cup Ramen": "fa-mug-hot",
   "Apple Sauce": "fa-apple-whole",
-  "Chips": "fa-bowl-food"
+  "Chips": "fa-chip" // will fallback if FA doesn't have 'fa-chip'
 };
 
-// COLORS (for buttons)
+// BUTTON COLORS (soft)
 const colors = {
-  "Candy":"#e74c3c",
-  "Small Candy (2)":"#f39c12",
-  "Soda":"#3498db",
-  "Gatorade":"#1abc9c",
-  "Water":"#2980b9",
-  "Sunny D":"#f1c40f",
-  "Capri Sun":"#9b59b6",
-  "Mac and Cheese":"#e67e22",
-  "Ramen (Beef)":"#c0392b",
-  "Ramen (Chicken)":"#d35400",
-  "Cup Ramen":"#16a085",
-  "Apple Sauce":"#27ae60",
-  "Chips":"#f39c12"
+  "Candy":"#f28b82",
+  "Small Candy (2)":"#fbbc04",
+  "Soda":"#aecbfa",
+  "Gatorade":"#a7ffeb",
+  "Water":"#cbf0f8",
+  "Sunny D":"#fff475",
+  "Capri Sun":"#d7aefb",
+  "Mac and Cheese":"#fdcfe8",
+  "Ramen (Beef)":"#e6c9a8",
+  "Ramen (Chicken)":"#fddfcf",
+  "Cup Ramen":"#e8eaed",
+  "Apple Sauce":"#ccff90",
+  "Chips":"#ffe6cc"
 };
 
 // DATA
@@ -97,13 +95,12 @@ products.forEach(name => {
 
   const div = document.createElement("div");
   div.className = "product";
-  div.style.background = colors[name] || "#bdc3c7";
 
   div.innerHTML = `
     <div class="badge">${data[name].units}</div>
     <i class="fa-solid ${icons[name] || 'fa-box'} icon"></i>
     <p>${name}</p>
-    <button>Sell $1</button>
+    <button style="background-color:${colors[name]};">Sell $1</button>
   `;
 
   const btn = div.querySelector("button");
@@ -137,17 +134,14 @@ products.forEach(name => {
   total += data[name].revenue;
 });
 
-// TOTAL
 totalDiv.textContent = "$" + total.toFixed(2);
 
-// UPDATE TABLE
 function updateTable(name){
   const row = document.getElementById(name);
   row.children[1].textContent = data[name].units;
   row.children[2].textContent = data[name].revenue.toFixed(2);
 }
 
-// SAVE
 function save(){
   localStorage.setItem("sales", JSON.stringify(data));
 }
