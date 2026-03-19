@@ -1,86 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Store POS</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>Store POS System</h1>
+  <div class="top-bar">
+    <div id="total-sales">$0.00</div>
+    <button id="reset-btn">Reset</button>
+  </div>
+</header>
+
+<main>
+
+<!-- PRODUCTS -->
+<div class="products" id="products"></div>
+
+<!-- TABLE -->
+<div class="table-section">
+  <h2>Sales Summary</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Qty</th>
+        <th>$</th>
+      </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</div>
+
+</main>
+
 <script>
-let totalSales = 0;
-const totalSalesDiv = document.getElementById('total-sales');
-<button id="reset-btn">Reset All Sales</button>
-const salesTableBody = document.querySelector('#sales-table tbody');
-const resetBtn = document.getElementById('reset-btn');
+// PRODUCTS LIST
+const products = [
+"Candy","Soda","Gatorade","Water","Sunny D","Capri Sun",
+"Mac and Cheese","Ramen (Beef)","Ramen (Chicken)",
+"Cup Ramen","Apple Sauce","Small Candy (2)","Chips"
+];
 
-// Load saved data OR initialize
-let productSales = JSON.parse(localStorage.getItem('productSales')) || {};
+// STATE
+let data = JSON.parse(localStorage.getItem("sales")) || {};
+let total = 0;
 
-// Initialize table + badges
-document.querySelectorAll('.product').forEach(prod => {
-  const name = prod.dataset.name;
-  const price = parseFloat(prod.dataset.price);
-  const badge = prod.querySelector('.badge');
+const productsDiv = document.getElementById("products");
+const table = document.getElementById("table-body");
+const totalDiv = document.getElementById("total-sales");
 
-  // If product not saved yet
-  if (!productSales[name]) {
-    productSales[name] = { units: 0, revenue: 0 };
-  }
+// CREATE UI
+products.forEach(name => {
 
-  // Set badge
-  badge.textContent = productSales[name].units;
+  if (!data[name]) data[name] = { units: 0, revenue: 0 };
 
-  // Create table row
-  const row = document.createElement('tr');
-  row.id = `row-${name.replace(/\s+/g, '-')}`;
+  const div = document.createElement("div");
+  div.className = "product";
+
+  div.innerHTML = `
+    <div class="badge">${data[name].units}</div>
+    <img src="https://via.placeholder.com/100?text=${encodeURIComponent(name)}">
+    <p>${name}</p>
+    <button>Sell $1</button>
+  `;
+
+  const btn = div.querySelector("button");
+  const badge = div.querySelector(".badge");
+
+  btn.onclick = () => {
+    data[name].units++;
+    data[name].revenue += 1;
+
+    badge.textContent = data[name].units;
+
+    total += 1;
+    totalDiv.textContent = "$" + total.toFixed(2);
+
+    updateTable(name);
+    save();
+  };
+
+  productsDiv.appendChild(div);
+
+  // table row
+  const row = document.createElement("tr");
+  row.id = name;
   row.innerHTML = `
     <td>${name}</td>
-    <td>${productSales[name].units}</td>
-    <td>${productSales[name].revenue.toFixed(2)}</td>
+    <td>${data[name].units}</td>
+    <td>${data[name].revenue.toFixed(2)}</td>
   `;
-  salesTableBody.appendChild(row);
+  table.appendChild(row);
 
-  // Add sold styling if needed
-  if (productSales[name].units > 0) {
-    prod.classList.add('sold');
-  }
-
-  // Add to total
-  totalSales += productSales[name].revenue;
+  total += data[name].revenue;
 });
 
-// Update total display
-totalSalesDiv.textContent = "Total Sales: $" + totalSales.toFixed(2);
+// UPDATE TOTAL
+totalDiv.textContent = "$" + total.toFixed(2);
 
-// Handle selling
-document.querySelectorAll('.sell-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const productDiv = btn.closest('.product');
-    const name = productDiv.dataset.name;
-    const price = parseFloat(productDiv.dataset.price);
-    const badge = productDiv.querySelector('.badge');
+// UPDATE TABLE
+function updateTable(name){
+  const row = document.getElementById(name);
+  row.children[1].textContent = data[name].units;
+  row.children[2].textContent = data[name].revenue.toFixed(2);
+}
 
-    // Update data
-    productSales[name].units++;
-    productSales[name].revenue += price;
+// SAVE
+function save(){
+  localStorage.setItem("sales", JSON.stringify(data));
+}
 
-    // Update badge
-    badge.textContent = productSales[name].units;
-
-    // Highlight
-    productDiv.classList.add('sold');
-
-    // Update total
-    totalSales += price;
-    totalSalesDiv.textContent = "Total Sales: $" + totalSales.toFixed(2);
-
-    // Update table
-    const row = document.getElementById(`row-${name.replace(/\s+/g, '-')}`);
-    row.cells[1].textContent = productSales[name].units;
-    row.cells[2].textContent = productSales[name].revenue.toFixed(2);
-
-    // SAVE to browser
-    localStorage.setItem('productSales', JSON.stringify(productSales));
-  });
-});
-
-// RESET BUTTON
-resetBtn.addEventListener('click', () => {
-  if (!confirm("Are you sure you want to reset all sales?")) return;
-
-  localStorage.removeItem('productSales');
+// RESET
+document.getElementById("reset-btn").onclick = () => {
+  if (!confirm("Reset all sales?")) return;
+  localStorage.clear();
   location.reload();
-});
+};
 </script>
+
+</body>
+</html>
