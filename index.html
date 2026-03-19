@@ -1,81 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Front-End Sales Dashboard</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header>
-  <h1>Sales Dashboard</h1>
-  <div id="total-sales">Total Sales: $0.00</div>
-</header>
-
-<main>
-  <section class="products">
-    <div class="product" data-price="1.00" data-name="Candy">
-      <div class="badge">0</div>
-      <img src="https://via.placeholder.com/100?text=Candy" alt="Candy">
-      <p>Candy - $1.00</p>
-      <button class="sell-btn">Sell</button>
-    </div>
-    <div class="product" data-price="1.00" data-name="Soda">
-      <div class="badge">0</div>
-      <img src="https://via.placeholder.com/100?text=Soda" alt="Soda">
-      <p>Soda - $1.00</p>
-      <button class="sell-btn">Sell</button>
-    </div>
-    <div class="product" data-price="1.00" data-name="Gatorade">
-      <div class="badge">0</div>
-      <img src="https://via.placeholder.com/100?text=Gatorade" alt="Gatorade">
-      <p>Gatorade - $1.00</p>
-      <button class="sell-btn">Sell</button>
-    </div>
-    <!-- Add more products similarly -->
-  </section>
-
-  <section class="sales-table-section">
-    <h2>Product Sales Summary</h2>
-    <table id="sales-table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Units Sold</th>
-          <th>Revenue ($)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Rows will be dynamically added -->
-      </tbody>
-    </table>
-  </section>
-</main>
-
-<footer>
-  <p>&copy; 2026 Sales Dashboard</p>
-</footer>
-
 <script>
 let totalSales = 0;
 const totalSalesDiv = document.getElementById('total-sales');
+<button id="reset-btn">Reset All Sales</button>
 const salesTableBody = document.querySelector('#sales-table tbody');
+const resetBtn = document.getElementById('reset-btn');
 
-// Object to track sales per product
-const productSales = {};
+// Load saved data OR initialize
+let productSales = JSON.parse(localStorage.getItem('productSales')) || {};
 
-// Initialize table rows for each product
+// Initialize table + badges
 document.querySelectorAll('.product').forEach(prod => {
   const name = prod.dataset.name;
-  productSales[name] = { units: 0, revenue: 0 };
-  
+  const price = parseFloat(prod.dataset.price);
+  const badge = prod.querySelector('.badge');
+
+  // If product not saved yet
+  if (!productSales[name]) {
+    productSales[name] = { units: 0, revenue: 0 };
+  }
+
+  // Set badge
+  badge.textContent = productSales[name].units;
+
+  // Create table row
   const row = document.createElement('tr');
   row.id = `row-${name.replace(/\s+/g, '-')}`;
-  row.innerHTML = `<td>${name}</td><td>0</td><td>0.00</td>`;
+  row.innerHTML = `
+    <td>${name}</td>
+    <td>${productSales[name].units}</td>
+    <td>${productSales[name].revenue.toFixed(2)}</td>
+  `;
   salesTableBody.appendChild(row);
+
+  // Add sold styling if needed
+  if (productSales[name].units > 0) {
+    prod.classList.add('sold');
+  }
+
+  // Add to total
+  totalSales += productSales[name].revenue;
 });
 
-// Button click handler
+// Update total display
+totalSalesDiv.textContent = "Total Sales: $" + totalSales.toFixed(2);
+
+// Handle selling
 document.querySelectorAll('.sell-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const productDiv = btn.closest('.product');
@@ -83,28 +52,35 @@ document.querySelectorAll('.sell-btn').forEach(btn => {
     const price = parseFloat(productDiv.dataset.price);
     const badge = productDiv.querySelector('.badge');
 
-    // Update badge count
-    let count = parseInt(badge.textContent);
-    count++;
-    badge.textContent = count;
-
-    // Highlight product
-    productDiv.classList.add('sold');
-
-    // Update total sales
-    totalSales += price;
-    totalSalesDiv.textContent = "Total Sales: $" + totalSales.toFixed(2);
-
-    // Update product-specific sales
+    // Update data
     productSales[name].units++;
     productSales[name].revenue += price;
 
-    // Update table row
+    // Update badge
+    badge.textContent = productSales[name].units;
+
+    // Highlight
+    productDiv.classList.add('sold');
+
+    // Update total
+    totalSales += price;
+    totalSalesDiv.textContent = "Total Sales: $" + totalSales.toFixed(2);
+
+    // Update table
     const row = document.getElementById(`row-${name.replace(/\s+/g, '-')}`);
     row.cells[1].textContent = productSales[name].units;
     row.cells[2].textContent = productSales[name].revenue.toFixed(2);
+
+    // SAVE to browser
+    localStorage.setItem('productSales', JSON.stringify(productSales));
   });
 });
+
+// RESET BUTTON
+resetBtn.addEventListener('click', () => {
+  if (!confirm("Are you sure you want to reset all sales?")) return;
+
+  localStorage.removeItem('productSales');
+  location.reload();
+});
 </script>
-</body>
-</html>
