@@ -5,12 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Store POS</title>
 
-<!-- Font Awesome -->
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-/>
-
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -58,24 +52,24 @@
     "Chips",
   ];
 
-  // ICONS (neutral color)
-  const icons = {
-    Candy: "fa-candy-cane",
-    "Small Candy (2)": "fa-cookie",
-    Soda: "fa-glass-water",
-    Gatorade: "fa-bottle-water",
-    Water: "fa-droplet",
-    "Sunny D": "fa-sun",
-    "Capri Sun": "fa-cup-straw",
-    "Mac and Cheese": "fa-bowl-food",
-    "Ramen (Beef)": "fa-utensils",
-    "Ramen (Chicken)": "fa-mug-hot",
-    "Cup Ramen": "fa-mug-hot",
-    "Apple Sauce": "fa-apple-whole",
-    Chips: "fa-bag-shopping",
+  // IMAGE URLs for each product (replace with your own image URLs as needed)
+  const images = {
+    Candy: "https://i.imgur.com/4bQ9c2R.png",               // candy image
+    "Small Candy (2)": "https://i.imgur.com/q5H9v0V.png",  // small candy image
+    Soda: "https://i.imgur.com/7FJ07pG.png",                // soda bottle
+    Gatorade: "https://i.imgur.com/E47sUQP.png",            // gatorade bottle
+    Water: "https://i.imgur.com/jGDSChW.png",               // water bottle
+    "Sunny D": "https://i.imgur.com/yTyxQcE.png",           // orange juice box
+    "Capri Sun": "https://i.imgur.com/MHPwLnB.png",         // capri sun pouch
+    "Mac and Cheese": "https://i.imgur.com/Y0dHtL5.png",    // mac and cheese cup
+    "Ramen (Beef)": "https://i.imgur.com/9bcd1vQ.png",      // ramen bowl beef
+    "Ramen (Chicken)": "https://i.imgur.com/rAO0yZn.png",   // ramen bowl chicken
+    "Cup Ramen": "https://i.imgur.com/cC4YXNZ.png",         // cup ramen
+    "Apple Sauce": "https://i.imgur.com/fUNz3mD.png",       // applesauce cup
+    Chips: "https://i.imgur.com/UvSq9bL.png",                // chips bag
   };
 
-  // BUTTON COLORS
+  // BUTTON COLORS (keep them for buttons)
   const colors = {
     Candy: "#f28b82",
     "Small Candy (2)": "#fbbc04",
@@ -92,7 +86,6 @@
     Chips: "#ffe6cc",
   };
 
-  // LOAD DATA
   let data = JSON.parse(localStorage.getItem("sales")) || {};
   let total = 0;
 
@@ -100,7 +93,6 @@
   const table = document.getElementById("table-body");
   const totalDiv = document.getElementById("total-sales");
 
-  // CREATE PRODUCT CARDS
   products.forEach((name) => {
     if (!data[name]) data[name] = { units: 0, revenue: 0 };
 
@@ -109,7 +101,7 @@
 
     div.innerHTML = `
       <div class="badge">${data[name].units}</div>
-      <i class="fa-solid ${icons[name] || "fa-box"} icon"></i>
+      <img src="${images[name]}" alt="${name}" class="product-image" />
       <p>${name}</p>
       <button style="background-color:${colors[name]}">Sell $1</button>
     `;
@@ -132,7 +124,6 @@
 
     productsDiv.appendChild(div);
 
-    // CREATE TABLE ROW
     const row = document.createElement("tr");
     row.id = name;
     row.innerHTML = `
@@ -145,10 +136,8 @@
     total += data[name].revenue;
   });
 
-  // DISPLAY TOTAL
   totalDiv.textContent = "$" + total.toFixed(2);
 
-  // UPDATE TABLE ROW FUNCTION
   function updateTable(name) {
     const row = document.getElementById(name);
     if (!row) return;
@@ -156,12 +145,10 @@
     row.children[2].textContent = data[name].revenue.toFixed(2);
   }
 
-  // SAVE TO LOCALSTORAGE
   function save() {
     localStorage.setItem("sales", JSON.stringify(data));
   }
 
-  // RESET BUTTON
   document.getElementById("reset-btn").onclick = () => {
     if (!confirm("Reset all sales?")) return;
     localStorage.clear();
