@@ -4,8 +4,193 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Store POS</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+  }
 
-<link rel="stylesheet" href="style.css" />
+  header {
+    background: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 15px 20px;
+    position: relative;
+  }
+
+  .top-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+    position: relative;
+  }
+
+  #total-sales {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2ecc71;
+    flex-grow: 1;
+    text-align: center;
+  }
+
+  #reset-btn {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    padding: 8px 16px;
+    background: #e74c3c;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+  }
+
+  #reset-btn:hover {
+    background: #c0392b;
+  }
+
+  .products {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+  }
+
+  .product {
+    background: white;
+    width: 130px;
+    padding: 15px 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    position: relative;
+    transition: transform 0.15s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .product:hover {
+    transform: scale(1.05);
+  }
+
+  .product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 10px;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .product p {
+    margin: 0 0 8px;
+    font-weight: 600;
+    font-size: 16px;
+    user-select: none;
+  }
+
+  .product button {
+    padding: 8px 0;
+    border: none;
+    border-radius: 6px;
+    color: #222;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    transition: filter 0.2s;
+    user-select: none;
+  }
+
+  .product button:hover {
+    filter: brightness(110%);
+  }
+
+  .badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #e74c3c;
+    color: white;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .sales-summary {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    padding: 0 20px;
+  }
+
+  .sales-summary summary {
+    font-weight: bold;
+    font-size: 20px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    user-select: none;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+  }
+
+  thead {
+    background: #34495e;
+    color: white;
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+    user-select: none;
+  }
+
+  tbody tr:hover {
+    background: #f0f0f0;
+  }
+
+  @media (max-width: 450px) {
+    .products {
+      gap: 12px;
+    }
+    .product {
+      width: 100px;
+      padding: 12px 8px;
+    }
+    .product-image {
+      width: 70px;
+      height: 70px;
+    }
+    .product p {
+      font-size: 14px;
+    }
+    #reset-btn {
+      top: 10px;
+      right: 10px;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+  }
+</style>
 </head>
 <body>
 <header>
@@ -35,123 +220,97 @@
 </main>
 
 <script>
-  const products = [
-    "Candy",
-    "Small Candy (2)",
-    "Soda",
-    "Gatorade",
-    "Water",
-    "Sunny D",
-    "Capri Sun",
-    "Mac and Cheese",
-    "Ramen (Beef)",
-    "Ramen (Chicken)",
-    "Cup Ramen",
-    "Apple Sauce",
-    "Chips",
-  ];
+const products = [
+  "Candy","Small Candy (2)","Soda","Gatorade","Water","Sunny D",
+  "Capri Sun","Mac and Cheese","Ramen (Beef)","Ramen (Chicken)",
+  "Cup Ramen","Apple Sauce","Chips"
+];
 
-  // Stable image URLs from Wikimedia Commons for demo
-  const images = {
-    Candy: "https://upload.wikimedia.org/wikipedia/commons/9/9b/Candy_icon.svg",
-    "Small Candy (2)": "https://upload.wikimedia.org/wikipedia/commons/2/25/Candy_cane_icon.svg",
-    Soda: "https://upload.wikimedia.org/wikipedia/commons/4/42/Soda_can_icon.svg",
-    Gatorade: "https://upload.wikimedia.org/wikipedia/commons/1/1e/Gatorade_logo.svg",
-    Water: "https://upload.wikimedia.org/wikipedia/commons/e/e9/Water_drop_icon.svg",
-    "Sunny D": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Sun_icon.svg",
-    "Capri Sun": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Juice_box_icon.svg",
-    "Mac and Cheese": "https://upload.wikimedia.org/wikipedia/commons/9/90/Macaroni_and_cheese_icon.svg",
-    "Ramen (Beef)": "https://upload.wikimedia.org/wikipedia/commons/8/88/Ramen_icon.svg",
-    "Ramen (Chicken)": "https://upload.wikimedia.org/wikipedia/commons/8/88/Ramen_icon.svg",
-    "Cup Ramen": "https://upload.wikimedia.org/wikipedia/commons/8/88/Ramen_icon.svg",
-    "Apple Sauce": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Apple_icon.svg",
-    Chips: "https://upload.wikimedia.org/wikipedia/commons/3/33/Chips_icon.svg"
+// Option 1: Stable PNG images from Imgur
+const images = {
+  Candy: "https://i.imgur.com/0rM6h2q.png",
+  "Small Candy (2)": "https://i.imgur.com/Zb6s9lX.png",
+  Soda: "https://i.imgur.com/2yN9uLx.png",
+  Gatorade: "https://i.imgur.com/6m4U0Pe.png",
+  Water: "https://i.imgur.com/RZk0x8H.png",
+  "Sunny D": "https://i.imgur.com/gUXV4Qo.png",
+  "Capri Sun": "https://i.imgur.com/3H6m0Mk.png",
+  "Mac and Cheese": "https://i.imgur.com/YwRnz1T.png",
+  "Ramen (Beef)": "https://i.imgur.com/4n5Ckx9.png",
+  "Ramen (Chicken)": "https://i.imgur.com/7mH2t2S.png",
+  "Cup Ramen": "https://i.imgur.com/Wq9rKzO.png",
+  "Apple Sauce": "https://i.imgur.com/1cFe8kL.png",
+  Chips: "https://i.imgur.com/fBtrwC3.png"
+};
+
+const colors = {
+  Candy: "#f28b82","Small Candy (2)":"#fbbc04",Soda:"#aecbfa",
+  Gatorade:"#a7ffeb",Water:"#cbf0f8","Sunny D":"#fff475",
+  "Capri Sun":"#d7aefb","Mac and Cheese":"#fdcfe8",
+  "Ramen (Beef)":"#e6c9a8","Ramen (Chicken)":"#fddfcf",
+  "Cup Ramen":"#e8eaed","Apple Sauce":"#ccff90",Chips:"#ffe6cc",
+};
+
+let data = JSON.parse(localStorage.getItem("sales")) || {};
+let total = 0;
+
+const productsDiv = document.getElementById("products");
+const table = document.getElementById("table-body");
+const totalDiv = document.getElementById("total-sales");
+
+products.forEach(name => {
+  if(!data[name]) data[name] = { units:0, revenue:0 };
+
+  const div = document.createElement("div");
+  div.className = "product";
+  div.innerHTML = `
+    <div class="badge">${data[name].units}</div>
+    <img src="${images[name]}" alt="${name}" class="product-image" />
+    <p>${name}</p>
+    <button style="background-color:${colors[name]}">Sell $1</button>
+  `;
+
+  const btn = div.querySelector("button");
+  const badge = div.querySelector(".badge");
+
+  btn.onclick = () => {
+    data[name].units++;
+    data[name].revenue += 1;
+    badge.textContent = data[name].units;
+    total += 1;
+    totalDiv.textContent = "$" + total.toFixed(2);
+    updateTable(name);
+    save();
   };
 
-  const colors = {
-    Candy: "#f28b82",
-    "Small Candy (2)": "#fbbc04",
-    Soda: "#aecbfa",
-    Gatorade: "#a7ffeb",
-    Water: "#cbf0f8",
-    "Sunny D": "#fff475",
-    "Capri Sun": "#d7aefb",
-    "Mac and Cheese": "#fdcfe8",
-    "Ramen (Beef)": "#e6c9a8",
-    "Ramen (Chicken)": "#fddfcf",
-    "Cup Ramen": "#e8eaed",
-    "Apple Sauce": "#ccff90",
-    Chips: "#ffe6cc",
-  };
+  productsDiv.appendChild(div);
 
-  let data = JSON.parse(localStorage.getItem("sales")) || {};
-  let total = 0;
+  const row = document.createElement("tr");
+  row.id = name;
+  row.innerHTML = `<td>${name}</td><td>${data[name].units}</td><td>${data[name].revenue.toFixed(2)}</td>`;
+  table.appendChild(row);
 
-  const productsDiv = document.getElementById("products");
-  const table = document.getElementById("table-body");
-  const totalDiv = document.getElementById("total-sales");
+  total += data[name].revenue;
+});
 
-  products.forEach((name) => {
-    if (!data[name]) data[name] = { units: 0, revenue: 0 };
+totalDiv.textContent = "$" + total.toFixed(2);
 
-    const div = document.createElement("div");
-    div.className = "product";
+function updateTable(name){
+  const row = document.getElementById(name);
+  if(!row) return;
+  row.children[1].textContent = data[name].units;
+  row.children[2].textContent = data[name].revenue.toFixed(2);
+}
 
-    div.innerHTML = `
-      <div class="badge">${data[name].units}</div>
-      <img src="${images[name]}" alt="${name}" class="product-image" />
-      <p>${name}</p>
-      <button style="background-color:${colors[name]}">Sell $1</button>
-    `;
+function save(){
+  localStorage.setItem("sales", JSON.stringify(data));
+}
 
-    const btn = div.querySelector("button");
-    const badge = div.querySelector(".badge");
-
-    btn.onclick = () => {
-      data[name].units++;
-      data[name].revenue += 1;
-
-      badge.textContent = data[name].units;
-
-      total += 1;
-      totalDiv.textContent = "$" + total.toFixed(2);
-
-      updateTable(name);
-      save();
-    };
-
-    productsDiv.appendChild(div);
-
-    const row = document.createElement("tr");
-    row.id = name;
-    row.innerHTML = `
-      <td>${name}</td>
-      <td>${data[name].units}</td>
-      <td>${data[name].revenue.toFixed(2)}</td>
-    `;
-    table.appendChild(row);
-
-    total += data[name].revenue;
-  });
-
-  totalDiv.textContent = "$" + total.toFixed(2);
-
-  function updateTable(name) {
-    const row = document.getElementById(name);
-    if (!row) return;
-    row.children[1].textContent = data[name].units;
-    row.children[2].textContent = data[name].revenue.toFixed(2);
-  }
-
-  function save() {
-    localStorage.setItem("sales", JSON.stringify(data));
-  }
-
-  document.getElementById("reset-btn").onclick = () => {
-    if (!confirm("Reset all sales?")) return;
-    localStorage.clear();
-    location.reload();
-  };
+document.getElementById("reset-btn").onclick = () => {
+  if(!confirm("Reset all sales?")) return;
+  localStorage.clear();
+  location.reload();
+};
 </script>
 </body>
 </html>
