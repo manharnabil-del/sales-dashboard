@@ -1,0 +1,110 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+header {
+  text-align: center;
+  background-color: #4CAF50;
+  color: white;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+#total-sales {
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.product {
+  background-color: white;
+  padding: 10px;
+  text-align: center;
+  border-radius: 8px;
+  width: 120px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product.sold {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(0,128,0,0.5);
+}
+
+.product img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+button.sell-btn {
+  margin-top: 5px;
+  padding: 5px 10px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button.sell-btn:hover {
+  background-color: #1976D2;
+}
+
+/* Badge for sold count */
+.badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #f44336;
+  color: white;
+  font-size: 0.8em;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sales Table */
+.sales-table-section {
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+
+#sales-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+#sales-table th, #sales-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+#sales-table th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.9em;
+  color: #666;
+}
