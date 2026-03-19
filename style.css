@@ -20,7 +20,7 @@ header {
   margin-top: 10px;
 }
 
-/* TOTAL DISPLAY */
+/* TOTAL SALES DISPLAY */
 #total-sales {
   font-size: 24px;
   font-weight: bold;
@@ -35,6 +35,7 @@ header {
   color: white;
   border-radius: 5px;
   cursor: pointer;
+  transition: 0.2s;
 }
 
 #reset-btn:hover {
@@ -78,7 +79,7 @@ header {
   color: #3498db;
 }
 
-/* BUTTON */
+/* BUTTON STYLE */
 .product button {
   margin-top: 5px;
   padding: 6px;
@@ -95,7 +96,7 @@ header {
   background: #2980b9;
 }
 
-/* BADGE (COUNT) */
+/* BADGE (PRODUCT COUNT) */
 .badge {
   position: absolute;
   top: 5px;
@@ -118,7 +119,7 @@ header {
   padding: 10px;
 }
 
-/* TABLE */
+/* TABLE STYLING */
 table {
   width: 100%;
   background: white;
