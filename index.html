@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Store POS</title>
 
 <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<link rel="stylesheet" href="style.css">
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+
+<link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
 <header>
   <h1>Store POS System</h1>
   <div class="top-bar">
@@ -20,139 +23,150 @@
 </header>
 
 <main>
+  <div class="products" id="products"></div>
 
-<div class="products" id="products"></div>
-
-<div class="table-section">
-  <h2>Sales Summary</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Product</th>
-        <th>Qty</th>
-        <th>$</th>
-      </tr>
-    </thead>
-    <tbody id="table-body"></tbody>
-  </table>
-</div>
-
+  <details class="sales-summary" id="sales-summary" open>
+    <summary>Sales Summary</summary>
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Qty</th>
+          <th>$</th>
+        </tr>
+      </thead>
+      <tbody id="table-body"></tbody>
+    </table>
+  </details>
 </main>
 
 <script>
-// PRODUCTS
-const products = [
-  "Candy","Small Candy (2)","Soda","Gatorade","Water","Sunny D","Capri Sun",
-  "Mac and Cheese","Ramen (Beef)","Ramen (Chicken)","Cup Ramen","Apple Sauce","Chips"
-];
+  // PRODUCTS
+  const products = [
+    "Candy",
+    "Small Candy (2)",
+    "Soda",
+    "Gatorade",
+    "Water",
+    "Sunny D",
+    "Capri Sun",
+    "Mac and Cheese",
+    "Ramen (Beef)",
+    "Ramen (Chicken)",
+    "Cup Ramen",
+    "Apple Sauce",
+    "Chips",
+  ];
 
-// ICONS (fixed)
-const icons = {
-  "Candy": "fa-candy-cane",
-  "Small Candy (2)": "fa-cookie",
-  "Soda": "fa-glass-water",
-  "Gatorade": "fa-bottle-water",
-  "Water": "fa-droplet",
-  "Sunny D": "fa-sun",
-  "Capri Sun": "fa-cup-straw",
-  "Mac and Cheese": "fa-bowl-food",
-  "Ramen (Beef)": "fa-utensils",
-  "Ramen (Chicken)": "fa-mug-hot",
-  "Cup Ramen": "fa-mug-hot",
-  "Apple Sauce": "fa-apple-whole",
-  "Chips": "fa-chip" // will fallback if FA doesn't have 'fa-chip'
-};
-
-// BUTTON COLORS (soft)
-const colors = {
-  "Candy":"#f28b82",
-  "Small Candy (2)":"#fbbc04",
-  "Soda":"#aecbfa",
-  "Gatorade":"#a7ffeb",
-  "Water":"#cbf0f8",
-  "Sunny D":"#fff475",
-  "Capri Sun":"#d7aefb",
-  "Mac and Cheese":"#fdcfe8",
-  "Ramen (Beef)":"#e6c9a8",
-  "Ramen (Chicken)":"#fddfcf",
-  "Cup Ramen":"#e8eaed",
-  "Apple Sauce":"#ccff90",
-  "Chips":"#ffe6cc"
-};
-
-// DATA
-let data = JSON.parse(localStorage.getItem("sales")) || {};
-let total = 0;
-
-const productsDiv = document.getElementById("products");
-const table = document.getElementById("table-body");
-const totalDiv = document.getElementById("total-sales");
-
-// BUILD UI
-products.forEach(name => {
-
-  if (!data[name]) data[name] = { units: 0, revenue: 0 };
-
-  const div = document.createElement("div");
-  div.className = "product";
-
-  div.innerHTML = `
-    <div class="badge">${data[name].units}</div>
-    <i class="fa-solid ${icons[name] || 'fa-box'} icon"></i>
-    <p>${name}</p>
-    <button style="background-color:${colors[name]};">Sell $1</button>
-  `;
-
-  const btn = div.querySelector("button");
-  const badge = div.querySelector(".badge");
-
-  btn.onclick = () => {
-    data[name].units++;
-    data[name].revenue += 1;
-
-    badge.textContent = data[name].units;
-
-    total += 1;
-    totalDiv.textContent = "$" + total.toFixed(2);
-
-    updateTable(name);
-    save();
+  // ICONS (neutral color)
+  const icons = {
+    Candy: "fa-candy-cane",
+    "Small Candy (2)": "fa-cookie",
+    Soda: "fa-glass-water",
+    Gatorade: "fa-bottle-water",
+    Water: "fa-droplet",
+    "Sunny D": "fa-sun",
+    "Capri Sun": "fa-cup-straw",
+    "Mac and Cheese": "fa-bowl-food",
+    "Ramen (Beef)": "fa-utensils",
+    "Ramen (Chicken)": "fa-mug-hot",
+    "Cup Ramen": "fa-mug-hot",
+    "Apple Sauce": "fa-apple-whole",
+    Chips: "fa-bag-shopping",
   };
 
-  productsDiv.appendChild(div);
+  // BUTTON COLORS
+  const colors = {
+    Candy: "#f28b82",
+    "Small Candy (2)": "#fbbc04",
+    Soda: "#aecbfa",
+    Gatorade: "#a7ffeb",
+    Water: "#cbf0f8",
+    "Sunny D": "#fff475",
+    "Capri Sun": "#d7aefb",
+    "Mac and Cheese": "#fdcfe8",
+    "Ramen (Beef)": "#e6c9a8",
+    "Ramen (Chicken)": "#fddfcf",
+    "Cup Ramen": "#e8eaed",
+    "Apple Sauce": "#ccff90",
+    Chips: "#ffe6cc",
+  };
 
-  // TABLE ROW
-  const row = document.createElement("tr");
-  row.id = name;
-  row.innerHTML = `
-    <td>${name}</td>
-    <td>${data[name].units}</td>
-    <td>${data[name].revenue.toFixed(2)}</td>
-  `;
-  table.appendChild(row);
+  // LOAD DATA
+  let data = JSON.parse(localStorage.getItem("sales")) || {};
+  let total = 0;
 
-  total += data[name].revenue;
-});
+  const productsDiv = document.getElementById("products");
+  const table = document.getElementById("table-body");
+  const totalDiv = document.getElementById("total-sales");
 
-totalDiv.textContent = "$" + total.toFixed(2);
+  // CREATE PRODUCT CARDS
+  products.forEach((name) => {
+    if (!data[name]) data[name] = { units: 0, revenue: 0 };
 
-function updateTable(name){
-  const row = document.getElementById(name);
-  row.children[1].textContent = data[name].units;
-  row.children[2].textContent = data[name].revenue.toFixed(2);
-}
+    const div = document.createElement("div");
+    div.className = "product";
 
-function save(){
-  localStorage.setItem("sales", JSON.stringify(data));
-}
+    div.innerHTML = `
+      <div class="badge">${data[name].units}</div>
+      <i class="fa-solid ${icons[name] || "fa-box"} icon"></i>
+      <p>${name}</p>
+      <button style="background-color:${colors[name]}">Sell $1</button>
+    `;
 
-// RESET
-document.getElementById("reset-btn").onclick = () => {
-  if (!confirm("Reset all sales?")) return;
-  localStorage.clear();
-  location.reload();
-};
+    const btn = div.querySelector("button");
+    const badge = div.querySelector(".badge");
+
+    btn.onclick = () => {
+      data[name].units++;
+      data[name].revenue += 1;
+
+      badge.textContent = data[name].units;
+
+      total += 1;
+      totalDiv.textContent = "$" + total.toFixed(2);
+
+      updateTable(name);
+      save();
+    };
+
+    productsDiv.appendChild(div);
+
+    // CREATE TABLE ROW
+    const row = document.createElement("tr");
+    row.id = name;
+    row.innerHTML = `
+      <td>${name}</td>
+      <td>${data[name].units}</td>
+      <td>${data[name].revenue.toFixed(2)}</td>
+    `;
+    table.appendChild(row);
+
+    total += data[name].revenue;
+  });
+
+  // DISPLAY TOTAL
+  totalDiv.textContent = "$" + total.toFixed(2);
+
+  // UPDATE TABLE ROW FUNCTION
+  function updateTable(name) {
+    const row = document.getElementById(name);
+    if (!row) return;
+    row.children[1].textContent = data[name].units;
+    row.children[2].textContent = data[name].revenue.toFixed(2);
+  }
+
+  // SAVE TO LOCALSTORAGE
+  function save() {
+    localStorage.setItem("sales", JSON.stringify(data));
+  }
+
+  // RESET BUTTON
+  document.getElementById("reset-btn").onclick = () => {
+    if (!confirm("Reset all sales?")) return;
+    localStorage.clear();
+    location.reload();
+  };
 </script>
-
 </body>
 </html>
