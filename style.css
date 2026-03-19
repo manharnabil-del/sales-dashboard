@@ -1,8 +1,7 @@
-/* RESET & BODY */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #ecf0f1;
+  background: #f4f6f8;
 }
 
 /* HEADER */
@@ -10,7 +9,7 @@ header {
   background: #2c3e50;
   color: white;
   text-align: center;
-  padding: 20px 10px;
+  padding: 15px;
 }
 
 .top-bar {
@@ -20,118 +19,99 @@ header {
   margin-top: 10px;
 }
 
-/* TOTAL DISPLAY */
 #total-sales {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: bold;
   color: #2ecc71;
 }
 
-/* RESET BUTTON */
 #reset-btn {
-  padding: 10px 18px;
+  padding: 8px 15px;
   background: #e74c3c;
   border: none;
   color: white;
-  border-radius: 8px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
 }
 
 #reset-btn:hover {
   background: #c0392b;
 }
 
-/* PRODUCTS GRID */
+/* PRODUCT GRID */
 .products {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  grid-template-columns: repeat(auto-fill, 130px);
   gap: 15px;
-  justify-items: center;
+  justify-content: center;
   padding: 20px;
 }
 
-/* PRODUCT CARD */
 .product {
-  background: #fff;
-  padding: 15px;
-  border-radius: 15px;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
   text-align: center;
   position: relative;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   transition: transform 0.2s;
-  width: 130px;
-  height: 180px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
 
 .product:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
 }
 
-/* ICON STYLE */
 .icon {
-  font-size: 50px;
-  margin: 5px 0;
-  color: white;
+  font-size: 45px;
+  margin: 10px 0;
+  color: #2c3e50;
   transition: 0.2s;
 }
 
 .product:hover .icon {
   transform: scale(1.2);
-  color: #fff;
+  color: #3498db;
 }
 
-/* BUTTON STYLE */
 .product button {
-  padding: 8px;
-  background: rgba(255,255,255,0.9);
-  color: #2c3e50;
+  margin-top: 5px;
+  padding: 6px;
   border: none;
-  border-radius: 8px;
+  width: 100%;
+  border-radius: 6px;
   cursor: pointer;
+  color: #2c3e50;
   font-weight: bold;
-  transition: 0.2s;
 }
 
-.product button:hover {
-  background: white;
-  color: #2980b9;
-}
-
-/* BADGE (PRODUCT COUNT) */
 .badge {
   position: absolute;
-  top: 8px;
-  right: 8px;
+  top: 5px;
+  right: 5px;
   background: #e74c3c;
   color: white;
   border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  font-size: 14px;
+  width: 22px;
+  height: 22px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* TABLE SECTION */
 .table-section {
-  max-width: 550px;
-  margin: 20px auto;
+  max-width: 500px;
+  margin: auto;
   padding: 10px;
 }
 
-/* TABLE STYLING */
 table {
   width: 100%;
   background: white;
   border-collapse: collapse;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 th {
@@ -140,8 +120,7 @@ th {
 }
 
 td, th {
-  padding: 10px;
+  padding: 8px;
   text-align: center;
   border: 1px solid #ddd;
-  font-size: 16px;
 }
