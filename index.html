@@ -7,10 +7,8 @@
 
 <!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <header>
@@ -23,6 +21,7 @@
 
 <main>
 
+<!-- Product Categories (optional future use) -->
 <div class="products" id="products"></div>
 
 <div class="table-section">
@@ -49,7 +48,7 @@ const products = [
   "Cup Ramen","Apple Sauce","Small Candy (2)","Chips"
 ];
 
-// UPDATED ICONS
+// ICONS
 const icons = {
   "Candy": "fa-candy-cane",
   "Small Candy (2)": "fa-cookie",
@@ -57,13 +56,30 @@ const icons = {
   "Gatorade": "fa-bottle-water",
   "Water": "fa-droplet",
   "Sunny D": "fa-sun",
-  "Capri Sun": "fa-cup-straw",       // UPDATED ICON
+  "Capri Sun": "fa-cup-straw",
   "Mac and Cheese": "fa-bowl-food",
   "Ramen (Beef)": "fa-utensils",
   "Ramen (Chicken)": "fa-utensils",
   "Cup Ramen": "fa-mug-hot",
   "Apple Sauce": "fa-apple-whole",
   "Chips": "fa-bowl-food"
+};
+
+// COLORS (for buttons)
+const colors = {
+  "Candy":"#e74c3c",
+  "Small Candy (2)":"#f39c12",
+  "Soda":"#3498db",
+  "Gatorade":"#1abc9c",
+  "Water":"#2980b9",
+  "Sunny D":"#f1c40f",
+  "Capri Sun":"#9b59b6",
+  "Mac and Cheese":"#e67e22",
+  "Ramen (Beef)":"#c0392b",
+  "Ramen (Chicken)":"#d35400",
+  "Cup Ramen":"#16a085",
+  "Apple Sauce":"#27ae60",
+  "Chips":"#f39c12"
 };
 
 // DATA
@@ -81,6 +97,7 @@ products.forEach(name => {
 
   const div = document.createElement("div");
   div.className = "product";
+  div.style.background = colors[name] || "#bdc3c7";
 
   div.innerHTML = `
     <div class="badge">${data[name].units}</div>
@@ -141,7 +158,6 @@ document.getElementById("reset-btn").onclick = () => {
   localStorage.clear();
   location.reload();
 };
-
 </script>
 
 </body>
