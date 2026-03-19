@@ -54,17 +54,18 @@
     background: #c0392b;
   }
 
+  /* UPDATED PRODUCTS GRID */
   .products {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 per row */
+    gap: 20px;
     padding: 20px;
+    justify-items: center;
   }
 
   .product {
     background: white;
-    width: 130px;
+    width: 150px; /* bigger product card */
     padding: 15px 10px;
     border-radius: 12px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -81,8 +82,8 @@
   }
 
   .product-image {
-    width: 80px;
-    height: 80px;
+    width: 100px; /* bigger images */
+    height: 100px;
     object-fit: contain;
     margin-bottom: 10px;
     pointer-events: none;
@@ -168,17 +169,29 @@
     background: #f0f0f0;
   }
 
+  /* RESPONSIVE GRID */
+  @media (max-width: 768px) {
+    .products {
+      grid-template-columns: repeat(3, 1fr); /* 3 per row on tablets */
+    }
+    .product-image {
+      width: 90px;
+      height: 90px;
+    }
+  }
+
   @media (max-width: 450px) {
     .products {
+      grid-template-columns: repeat(2, 1fr); /* 2 per row on phones */
       gap: 12px;
     }
     .product {
-      width: 100px;
+      width: 120px;
       padding: 12px 8px;
     }
     .product-image {
-      width: 70px;
-      height: 70px;
+      width: 80px;
+      height: 80px;
     }
     .product p {
       font-size: 14px;
@@ -226,7 +239,6 @@ const products = [
   "Cup Ramen","Apple Sauce","Chips"
 ];
 
-// Option 1: Stable PNG images from Imgur
 const images = {
   Candy: "https://blogger.googleusercontent.com/img/a/AVvXsEjROa6luUZyaAiadXvmSDD72cu-22xQ1Jz_lyCwoPBS9HtW4FQgvfP1qYtftdZUq54eOReMToEpIN_YeThpPbwrhh-97_8arTn7ev31DVoebsQDUw-5nc6iM5io8TylesXDd-RPgVBWcIn4OyDLgi8GVpzntbVy-WNBLgVfQdTdgamAHp5x3lrCUC7B=s16000",
   "Small Candy (2)": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYZDw5J5J3oXft2LFBA7YPGLW5y0L0W936Jw&s",
